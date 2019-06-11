@@ -1,0 +1,95 @@
+壁障demo(可以用)
+roslaunch mbot_gazebo mbot_laser_nav_gazebo_school_fixed_empty.launch
+ roslaunch mbot_navigation nav_school_demo.launch 
+
+
+
+slam建图(可以用）
+roslaunch mbot_gazebo mbot_laser_nav_gazebo_school_fixed_empty.launch
+roslaunch mbot_navigation gmapping_demo.launch
+roslaunch mbot_teleop mbot_teleop.launch
+rosrun map_server map_saver -f <文件名>
+
+建图之后，如何避障
+1，将保存下来的地图放到maps文件夹下面
+2，修改对应的launch文件中的地图名
+
+避障demo/------------------------------------------------------/real
+roslaunch mbot_gazebo mbot_laser_nav_gazebo_school_fixed_empty.launch//gazebo
+
+roslaunch mbot_navigation nav_school_full_demo.launch //加载建好的地图rviz
+
+
+-----------------------------------------------------------------------
+
+ydlidar 测试：
+roslaunch ydliadr liadr_view.launch
+
+
+
+ydlidar使用hector_slam建图：
+roslaunch ydlid slam.launch
+保存地图：rosrun map_server map_saver -f <filename>
+  注：捣鼓了接近一天，最后在turtoil.launch里面胡乱加了一句odom到map的变换就可以显示lidar的红色边界了！
+
+
+
+
+catographer 建图
+1.roslaunch mrobot_gazebo mrobot_laser_nav_gazebo.launch  （catkin_ws下面）
+  或者roslaunch mbot_gazebo mbot_laser_nav_gazebo_school_fixed_empty.launch 
+2.roslaunch cartographer_ros cartographer_demo_rplidar.launch 
+3.roslaunch mrobot_teleop mrobot_teleop.launch 
+
+自动建图
+1.将move_base 节点放到cartographer_ros launch文件夹中
+2.添加启动move_base节点，将cartographer_demo_rplidar.launch改名为exploring_cartographer_demo_rplidar.launch
+参考P283
+别忘了把move_base的config文件复制一份过来。
+
+
+
+查看usb接口：
+ls -l /dev |grep ttyUSB
+------------------------------------------------------
+小车建图
+5_23日
+raspberry:vncservice
+          roscore
+roslaunch turtlebot_bringup minimal.launch
+roslaunch turtlebot_navigation ydlidar_gmapping_demo.launch
+PC:
+roslaunch turtlebot_rviz_launchers view_navigation.launch
+roslaunch turtlebot_teleop keyboard_teleop.launch
+
+------------------------------------------------------------------
+
+6_3
+针对计算量不足的问题，将gmapping分为树莓派和PC，树莓派启动雷达。PC启动gmapping节点(6月4日可用）
+raspberry:
+vncservice
+          roscore
+roslaunch turtlebot_bringup minimal.launch
+roslaunch turtlebot_navigation ydlidar_gmapping_demo_alone.launch
+PC:
+roslaunch turtlebot_navigation ydlidar_gmapping_demo_alone.launch
+roslaunch turtlebot_rviz_launchers view_navigation.launch
+roslaunch turtlebot_teleop keyboard_teleop.launch
+-----------------------------------------------------------------
+
+
+导航
+raspberry:
+roscore
+roslaunch turtlrbot_bring minimal.launch
+roslaunch turtlebot_navigation ydlidar_amcl_demo_alone.launch(树莓派启动雷达）
+PC:
+roslaunch turtlebot_navigation ydlidar_amcl_demo_alone.launch（PC启动AMCL和move_base）
+roslaunch turtlebot_rviz_launchers view_navigation.launch
+//6月3日更新：1）把速度调低了find turtlebot_navigation)/param/dwa_local_planner_params.yaml"有备份
+2）树莓派中地图的更新频率改成了0.1
+
+
+
+
+

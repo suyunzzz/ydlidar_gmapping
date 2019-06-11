@@ -1,0 +1,15 @@
+#410路由器下（丢包问题严重）
+192.168.0.102   s-Aspire-E5-572G
+192.168.0.108    raspberry
+#FAST路由器下
+192.168.1.102 raspberry
+192.168.1.101  s-Aspire-E5-572G
+
+
+主机raspberry执行:rosore
+ roslaunch turtlebot_bring minimal.launch
+ roslaunch turtlebot_navigation ydlidar_gmapping_demo.launch
+
+本机s-Aspire-E5-572G是从机： roslaunch turtlebot_rviz_launchers view_navigation
+          roslaunch turtlebot_teleop keyboard_teleop.launch 
+
